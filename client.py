@@ -1,9 +1,14 @@
 import socket, subprocess, time
 from termcolor import colored
+
 passw = '1234'
+server = ('192.168.100.112', 4444)
+#server = (input('IP>'), INT(input('Port>')))
+time_out = 120
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.settimeout(60)
-s.connect((input('IP>'), 4444))
+s.settimeout(time_out)
+s.connect(server)
 s.send(passw.encode())
 
 def down():
@@ -79,16 +84,25 @@ while True:
     print(colored('1 - Download file', 'green'))
     print(colored('2 - Upload file', 'yellow'))
     print(colored('3 - Delete file', 'red'))
+    print(colored('4 - Exit', 'red'))
     cmd = int(input(colored('Choose>', 'yellow')))
-    s.send(str(cmd).encode())
-    s.recv(1)
     if cmd == 1:
+        s.send(str(cmd).encode())
+        s.recv(1)
         down()
-    if cmd == 2:
+    elif cmd == 2:
+        s.send(str(cmd).encode())
+        s.recv(1)
         up()
-    if cmd == 3:
+    elif cmd == 3:
+        s.send(str(cmd).encode())
+        s.recv(1)
         name = input(colored('Choose file name>', 'yellow'))
         s.send(name.encode())
         s.recv(1)
+    elif cmd == 4:
+        exit()
+    else:
+        print(colored('[-] Error', 'red'))
 file.close()
 s.close()
